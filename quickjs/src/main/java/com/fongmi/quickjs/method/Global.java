@@ -8,7 +8,7 @@ import com.fongmi.quickjs.utils.Connect;
 import com.fongmi.quickjs.utils.Crypto;
 import com.fongmi.quickjs.utils.JSUtil;
 import com.fongmi.quickjs.utils.Parser;
-import com.fongmi.quickjs.utils.Proxy;
+import com.github.catvod.Proxy;
 import com.github.catvod.utils.Trans;
 import com.orhanobut.logger.Logger;
 import com.whl.quickjs.wrapper.JSArray;
@@ -78,13 +78,13 @@ public class Global {
     @Keep
     @JSMethod
     public String getProxy(Boolean local) {
-        return Proxy.getUrl() + "?do=js";
+        return Proxy.getUrl(local) + "?do=js";
     }
 
     @Keep
     @JSMethod
     public String js2Proxy(Boolean dynamic, Integer siteType, String siteKey, String url, JSObject headers) {
-        return getProxy(true) + "&from=catvod" + "&siteType=" + siteType + "&siteKey=" + siteKey + "&header=" + URLEncoder.encode(headers.stringify()) + "&url=" + URLEncoder.encode(url);
+        return getProxy(!dynamic) + "&from=catvod" + "&siteType=" + siteType + "&siteKey=" + siteKey + "&header=" + URLEncoder.encode(headers.stringify()) + "&url=" + URLEncoder.encode(url);
     }
 
     @Keep
@@ -158,7 +158,7 @@ public class Global {
     @Keep
     @JSMethod
     public String rsaX(String mode, boolean pub, boolean encrypt, String input, boolean inBase64, String key, boolean outBase64) {
-        String result = Crypto.rsa(pub, encrypt, input, inBase64, key, outBase64);
+        String result = Crypto.rsa(mode, pub, encrypt, input, inBase64, key, outBase64);
         Logger.t("rsaX").d("mode:%s\npub:%s\nencrypt:%s\ninBase64:%s\noutBase64:%s\nkey:\n%s\ninput:\n%s\nresult:\n%s", mode, pub, encrypt, inBase64, outBase64, key, input, result);
         return result;
     }
